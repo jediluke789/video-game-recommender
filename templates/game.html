@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game }} search results</title>
+    <link href="{{ url_for('static', filename='styles/style.css')}}" rel="stylesheet" />
+</head>
+    
+<body>
+    <h1>{{ game }} search results</h1>
+    <p>{{ game }} - Released: {{ released }} - Rating: {{ rating }}</p>
+
+
+    <form action="/game">
+        <input type="text" name="game" id="game" placeholder="Enter a Game" />
+        <button type="submit">Get Game</button>
+    </form>
+</body>
+</html>
