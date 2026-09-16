@@ -3,18 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ game }} search results</title>
-    <link href="{{ url_for('static', filename='styles/style.css')}}" rel="stylesheet" />
+    <title>Search results for: {{ game }}</title>
+    <link href="{{ url_for('static', filename='styles/results_style.css')}}" rel="stylesheet" />
 </head>
     
 <body>
-    <h1>{{ game }} search results</h1>
-    <p>{{ game }} - Released: {{ released }} - Rating: {{ rating }}</p>
+    <h1>Search results for: {{ game }}</h1>
+    
+    {% for game in games %}
+    <div class="result-row">
+        
+        <div class="left">
+            <img src="{{ game.image }}" class="game-img">
+            <p>{{ game.name }} <br> Released: {{ game.released }} <br> Rating: {{ game.rating }}</p>
+        </div>
 
+        <div class="right">
+            <!--<form action="/favorite/{{ game.id }}" method="POST">
+                <input type="hidden" name="title" value="{{ game.name }}">
+                <input type="hidden" name="image_url" value="{{ game.image }}">
+                <input type="hidden" name="genres" value="{{ game.genres }}"> -->
+            <button type="submit">Favorite</button>
+          <!--  </form> -->
+        </div>
 
-    <form action="/game">
-        <input type="text" name="game" id="game" placeholder="Enter a Game" />
-        <button type="submit">Get Game</button>
+    </div>
+    {% endfor %}
+    
+    <!--
+    {% for game in games %}
+    <div style="display: flex; align-items: center; margin-bottom: 20px;">
+    <img src="{{ game.image }}" alt="Game Image" width="200" left="0" style="margin-right: 20px;">
+    <p style="margin: 0;">{{ game.name }} - Released: {{ game.released }} - Rating: {{ game.rating }}</p>
+    <button type="submit" style="margin-left: 20px;">Favorite</button>
+    </div>
+    {% endfor %}
+    -->
+    
+
+    <form action="/index">
+        <button type="submit">Back to Menu</button>
     </form>
 </body>
 </html>

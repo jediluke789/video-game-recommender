@@ -19,12 +19,21 @@ def get_game():
     try:
         if game_data['results'][0]['rating'] == 0:
             raise IndexError
+
+        games = []
+
+        for game in game_data['results']:
+            if game['rating'] > 0:
+                games.append({
+                    'name': game['name'],
+                    'released': game['released'],
+                    'rating': game['rating'],
+                    'image': game['background_image']
+                })
         return render_template(
             'game.html', 
-            game= game_data['results'][0]['name'], 
-            name=game_data['results'][0]['name'], 
-            released=game_data['results'][0]['released'],
-            rating=game_data['results'][0]['rating'])
+            games=games,
+            game=name)
     except IndexError:
         return render_template('invalid.html', error=f"No results found for '{name}'. Please try again.")
 

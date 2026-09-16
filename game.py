@@ -10,7 +10,7 @@ def main():
     if not bool(game_name.strip()):
         game_name = "Minecraft"
 
-    #pprint.pprint(get_requested_game(game_name))
+    pprint.pprint(get_requested_game(game_name))
     game_data = get_requested_game(game_name)
     print(f"Name: {game_data['results'][0]['name']}, Released: {game_data['results'][0]['released']}, Rating: {game_data['results'][0]['rating']}")
 
