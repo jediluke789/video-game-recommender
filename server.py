@@ -5,7 +5,9 @@ from waitress import serve
 import sqlite3
 import uuid
 from dotenv import load_dotenv
+from init_db import init_db
 
+init_db()  # Initialize the database when the server starts
 app = Flask(__name__)
 load_dotenv()
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default secret key if not set in .env

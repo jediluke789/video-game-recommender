@@ -1,25 +1,25 @@
 import sqlite3
 
 # define a connection and a cursor
+def init_db():
+    connection = sqlite3.connect("database.db")
 
-connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
 
-cursor = connection.cursor()
+    # create a table for the games
+    command1 = """CREATE TABLE IF NOT EXISTS games (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT,
+        name TEXT,
+        released TEXT,
+        rating TEXT,
+        image TEXT
+    )"""
 
-# create a table for the games
-command1 = """CREATE TABLE IF NOT EXISTS games (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT,
-    name TEXT,
-    released TEXT,
-    rating TEXT,
-    image TEXT
-)"""
-
-cursor.execute(command1)
-connection.commit()
-connection.close()
-print("Database initialized successfully with user_id support.")
+    cursor.execute(command1)
+    connection.commit()
+    connection.close()
+    print("Database initialized successfully with user_id support.")
 
 # add to games
 
