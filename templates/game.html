@@ -25,7 +25,11 @@
             <input type="hidden" name="rating" value="{{ game.rating }}">
 
             <div class="right">
+             {% if game.name in favorite_names %}
+                <button type="submit" class="favorite-btn" disabled>Favorited</button>
+                {% else %}
              <button type="submit" class="favorite-btn">Favorite</button>
+                {% endif %}
             </div>
         </form>
     

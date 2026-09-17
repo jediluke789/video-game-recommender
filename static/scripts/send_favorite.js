@@ -25,6 +25,7 @@ $(document).ready(function() {
             console.log("AJAX success:", data);
             //alert(data.title + " added to favorites!");
             submitButton.text("Favorited!");
+            submitButton.prop('disabled', true);
         })
         .fail(function(xhr, status, error) {
             console.error("AJAX error:", error);

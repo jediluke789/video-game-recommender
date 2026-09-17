@@ -40,7 +40,12 @@ def get_game():
             raise IndexError
 
         games = []
-
+        favorited_games = []
+        favorites = get_favorites(session.get('user_id'))
+        for g in results:
+            for h in favorites:
+                if g.get('name') == h.get('name'):
+                    favorited_games.append(g.get('name'))
         games = [
             {
                 'name': g.get('name'),
@@ -51,11 +56,13 @@ def get_game():
             for g in results if g.get('rating', 0) > 0
         ]
 
-        
+        print(favorites)  # Debugging line to check the list of favorited games
+        print(favorited_games)  # Debugging line to check the list of favorited game names
         return render_template(
             'game.html', 
             games=games,
-            game=name)
+            game=name,
+            favorite_names=favorited_games)
     except IndexError:
         return render_template('invalid.html', error=f"No results found for '{name}'. Please try again.")
 
