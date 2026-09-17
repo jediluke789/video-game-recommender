@@ -9,6 +9,7 @@ cursor = connection.cursor()
 # create a table for the games
 command1 = """CREATE TABLE IF NOT EXISTS games (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT,
     name TEXT,
     released TEXT,
     rating TEXT,
@@ -16,6 +17,9 @@ command1 = """CREATE TABLE IF NOT EXISTS games (
 )"""
 
 cursor.execute(command1)
+connection.commit()
+connection.close()
+print("Database initialized successfully with user_id support.")
 
 # add to games
 

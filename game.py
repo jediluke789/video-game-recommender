@@ -29,20 +29,25 @@ def get_requested_game(game_name="Minecraft"):
     #        response += f"Name: {game['name']}, Released: {game['released']}, Rating: {game['rating']}\n"
     #return response
 
-def get_favorites():
+def get_favorites(user_id):
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
-
+    cursor.execute(
+        "SELECT name, released, rating, image FROM games WHERE user_id = ?",
+        (user_id,)
+    )
+    rows = cursor.fetchall()
+    connection.close()
     #cursor.execute("INSERT INTO games (name, released, rating, image) VALUES (?, ?, ?, ?)", ("Minecraft", "2011-11-18", "4.5", "https://media.rawg.io/media/games/b4e/b4e4c73d5aa4ec66bbf75375c4847a2b.jpg"))
     #cursor.execute("INSERT INTO games (name, released, rating, image) VALUES (?, ?, ?, ?)", ("The Legend of Zelda: Breath of the Wild", "2017-03-03", "4.8", "https://media.rawg.io/media/games/cc1/cc196a5ad763955d6532cdba236f730c.jpg"))
 
     favorites = []
-    for row in cursor.execute("SELECT * FROM games"):
+    for row in rows:
         favorites.append({
-            'name': row[1],
-            'released': row[2],
-            'rating': row[3],
-            'image': row[4]
+            'name': row[0],
+            'released': row[1],
+            'rating': row[2],
+            'image': row[3]
         })
     return favorites
 

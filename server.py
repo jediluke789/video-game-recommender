@@ -1,11 +1,22 @@
-from flask import Flask, redirect, render_template, request, jsonify
+import os
+from flask import Flask, redirect, render_template, request, jsonify, session
 from game import get_requested_game, get_favorites
 from waitress import serve
 import sqlite3
+import uuid
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+load_dotenv()
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default secret key if not set in .env
 
-globalGames = []
+@app.before_request
+def assign_user_session():
+    # Assign a unique session ID to the visitor if they don't already have one
+    if 'user_id' not in session:
+        session['user_id'] = str(uuid.uuid4())
+
+#globalGames = []
 
 @app.route('/')
 @app.route('/index')
@@ -15,31 +26,32 @@ def index():
 
 @app.route('/game')
 def get_game():
-    global globalGames
-    name = request.args.get('game')
+    #global globalGames
+    name = request.args.get('game', '').strip()
 
-    if name != None and not bool(name.strip()):
+    if not name:
         return render_template('invalid.html', error="Please enter a game name.")
-    elif name == None:
-        return render_template('game.html', games=globalGames, game=globalGames[0]['name'] if globalGames else None)
+    
     game_data = get_requested_game(name)
     try:
-        if game_data['results'][0]['rating'] == 0:
+        results = game_data.get('results', [])
+        if not results or results[0].get('rating', 0) == 0:
             raise IndexError
 
         games = []
 
-        for game in game_data['results']:
-            if game['rating'] > 0:
-                games.append({
-                    'name': game['name'],
-                    'released': game['released'],
-                    'rating': game['rating'],
-                    'image': game['background_image']
-                })
+        games = [
+            {
+                'name': g.get('name'),
+                'released': g.get('released'),
+                'rating': g.get('rating'),
+                'image': g.get('background_image')
+            }
+            for g in results if g.get('rating', 0) > 0
+        ]
 
         
-        globalGames = games
+        #globalGames = games
         return render_template(
             'game.html', 
             games=games,
@@ -49,7 +61,8 @@ def get_game():
 
 @app.route('/favorites_page')
 def favorites_page():
-    favorites = get_favorites()
+    user_id = session.get('user_id')
+    favorites = get_favorites(user_id)
 
     return render_template('favorites_page.html', favorites=favorites)
 
@@ -59,6 +72,7 @@ def process_favorite():
     if not data:
         return jsonify({'error': 'Invalid payload'}), 400
 
+    user_id = session.get('user_id')
     title = data.get('title')
     image_url = data.get('image_url')
     released = data.get('released')
@@ -71,7 +85,7 @@ def process_favorite():
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
 
-    cursor.execute("INSERT INTO games (name, released, rating, image) VALUES (?, ?, ?, ?)", (title, released, rating, image_url))
+    cursor.execute("INSERT INTO games (user_id, name, released, rating, image) VALUES (?, ?, ?, ?, ?)", (user_id, title, released, rating, image_url))
     connection.commit()
     connection.close()
 
