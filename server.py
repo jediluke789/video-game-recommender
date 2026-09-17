@@ -18,7 +18,7 @@ def assign_user_session():
     if 'user_id' not in session:
         session['user_id'] = str(uuid.uuid4())
 
-#globalGames = []
+
 
 @app.route('/')
 @app.route('/index')
@@ -28,7 +28,6 @@ def index():
 
 @app.route('/game')
 def get_game():
-    #global globalGames
     name = request.args.get('game', '').strip()
 
     if not name:
@@ -53,7 +52,6 @@ def get_game():
         ]
 
         
-        #globalGames = games
         return render_template(
             'game.html', 
             games=games,
@@ -79,10 +77,6 @@ def process_favorite():
     image_url = data.get('image_url')
     released = data.get('released')
     rating = data.get('rating')
-    #title = request.form['title']
-    #image_url = request.form['image_url']
-    #released = request.form['released']
-    #rating = request.form['rating']
     print("running")
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
@@ -93,29 +87,6 @@ def process_favorite():
 
 
     return jsonify({'title': title, 'image_url': image_url, 'released': released, 'rating': rating})
-
-
-#@app.route('/favorite/<string:game_name>', methods=['POST'])
-#def favorite_game():
-    print("hi")
-    title = request.form['title']
-    image_url = request.form['image_url']
-    released = request.form['released']
-    rating = request.form['rating']
-
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-
-    cursor.execute("INSERT INTO games (name, released, rating, image) VALUES (?, ?, ?, ?)", (title, released, rating, image_url))
-    connection.commit()
-    #connection.close()
-
-    cursor.execute("SELECT * FROM games")
-    results = cursor.fetchall()
-    print(results)
-    
-    #return render_template('favorite_success.html', title=title)
-    return render_template("game.html")
 
 
 if __name__ == '__main__':
