@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites</title>
+    <link href="{{ url_for('static', filename='styles/results_style.css')}}" rel="stylesheet" />
+</head>
+    
+<body>
+    <h1>Favorites</h1>
+    
+    {% for game in favorites %}
+    <div class="result-row">
+        
+        <div class="left">
+            <img src="{{ game.image }}" class="game-img">
+            <p>{{ game.name }} <br> Released: {{ game.released }} <br> Rating: {{ game.rating }}</p>
+        </div>
+
+        <div class="right">
+            <!--<form action="/favorite/{{ game.id }}" method="POST">
+                <input type="hidden" name="title" value="{{ game.name }}">
+                <input type="hidden" name="image_url" value="{{ game.image }}">
+                <input type="hidden" name="genres" value="{{ game.genres }}"> -->
+            <button type="submit">Remove</button>
+          <!--  </form> -->
+        </div>
+
+    </div>
+    {% endfor %}
+    
+   
+    
+
+    <form action="/index">
+        <button type="submit">Back to Menu</button>
+    </form>
+</body>
+</html>

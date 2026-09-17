@@ -6,7 +6,7 @@
     <title>Search results for: {{ game }}</title>
     <link href="{{ url_for('static', filename='styles/results_style.css')}}" rel="stylesheet" />
 </head>
-    
+
 <body>
     <h1>Search results for: {{ game }}</h1>
     
@@ -17,16 +17,18 @@
             <img src="{{ game.image }}" class="game-img">
             <p>{{ game.name }} <br> Released: {{ game.released }} <br> Rating: {{ game.rating }}</p>
         </div>
+        
+        <form class="form-inline">
+            <input type="hidden" name="title" value="{{ game.name }}">
+            <input type="hidden" name="image_url" value="{{ game.image }}">
+            <input type="hidden" name="released" value="{{ game.released }}">
+            <input type="hidden" name="rating" value="{{ game.rating }}">
 
-        <div class="right">
-            <!--<form action="/favorite/{{ game.id }}" method="POST">
-                <input type="hidden" name="title" value="{{ game.name }}">
-                <input type="hidden" name="image_url" value="{{ game.image }}">
-                <input type="hidden" name="genres" value="{{ game.genres }}"> -->
-            <button type="submit">Favorite</button>
-          <!--  </form> -->
-        </div>
-
+            <div class="right">
+             <button type="submit" class="favorite-btn">Favorite</button>
+            </div>
+        </form>
+    
     </div>
     {% endfor %}
     
@@ -44,5 +46,9 @@
     <form action="/index">
         <button type="submit">Back to Menu</button>
     </form>
+    
+  <!--  <script src="{{ url_for('static', filename='scripts/send_favorite.js') }}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/send_favorite.js') }}"></script>
 </body>
 </html>
