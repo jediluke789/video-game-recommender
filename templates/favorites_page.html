@@ -19,12 +19,11 @@
         </div>
 
         <div class="right">
-            <!--<form action="/favorite/{{ game.id }}" method="POST">
+            <form action="/remove_favorite" method="GET">
                 <input type="hidden" name="title" value="{{ game.name }}">
-                <input type="hidden" name="image_url" value="{{ game.image }}">
-                <input type="hidden" name="genres" value="{{ game.genres }}"> -->
-            <button type="submit">Remove</button>
-          <!--  </form> -->
+                <input type="hidden" name="user_id" value="{{ user_id }}">
+                <button type="submit">Remove</button>
+            </form>
         </div>
 
     </div>

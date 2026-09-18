@@ -1,6 +1,6 @@
 import os
 from flask import Flask, redirect, render_template, request, jsonify, session
-from game import get_requested_game, get_favorites
+from game import get_requested_game, get_favorites, deleteRow
 from waitress import serve
 import sqlite3
 import uuid
@@ -94,6 +94,13 @@ def process_favorite():
 
 
     return jsonify({'title': title, 'image_url': image_url, 'released': released, 'rating': rating})
+
+@app.route('/remove_favorite')
+def remove_favorite():
+    user_id = session.get('user_id')
+    title = request.args.get('title')
+    deleteRow(user_id, title)
+    return favorites_page()  # Return the updated favorites page
 
 
 if __name__ == '__main__':

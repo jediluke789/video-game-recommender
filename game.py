@@ -51,6 +51,15 @@ def get_favorites(user_id):
         })
     return favorites
 
+def deleteRow(user_id, title):
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    cursor.execute(
+        "DELETE FROM games WHERE user_id = ? AND name = ?",
+        (user_id, title)
+    )
+    connection.commit()
+    connection.close()
 
 if __name__ == "__main__":
     main()
