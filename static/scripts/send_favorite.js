@@ -7,9 +7,9 @@ $(document).ready(function() {
         const form = $(this);
         const submitButton = form.find('.favorite-btn');
 
-        // Optional: disable button briefly to prevent accidental duplicate clicks
+        // Disable button to prevent accidental duplicate clicks
         submitButton.prop('disabled', true);
-
+        // Call the AJAX function to send the favorite game data to the server
         $.ajax({
             url: '/process_favorite',
             type: 'POST',
@@ -21,6 +21,7 @@ $(document).ready(function() {
                 rating: form.find('input[name="rating"]').val()
             })
         })
+        // Handle the AJAX response and change the button text to "Favorited!" if successful, or re-enable the button if there was an error
         .done(function(data) {
             console.log("AJAX success:", data);
             //alert(data.title + " added to favorites!");
