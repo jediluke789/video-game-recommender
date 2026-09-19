@@ -7,6 +7,7 @@ import sqlite3
 load_dotenv()
 
 def main():
+    # Main function to test the get_requested_game function and print the results
     game_name = input("Enter a game name: ")
     if not bool(game_name.strip()):
         game_name = "Minecraft"
@@ -30,6 +31,7 @@ def get_requested_game(game_name="Minecraft"):
     #return response
 
 def get_favorites(user_id):
+    # Connect to the SQLite database and retrieve the favorite games for the given user_id
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute(
@@ -52,6 +54,7 @@ def get_favorites(user_id):
     return favorites
 
 def deleteRow(user_id, title):
+    # Connect to the SQLite database and delete the favorite game for the given user_id and title
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute(

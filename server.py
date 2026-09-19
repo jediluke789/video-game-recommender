@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 from init_db import init_db
 
 init_db()  # Initialize the database when the server starts
-app = Flask(__name__)
-load_dotenv()
+app = Flask(__name__) # Create a Flask application instance
+load_dotenv() # Load environment variables from a .env file
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'default_secret_key')  # Use a default secret key if not set in .env
 
 @app.before_request
@@ -28,8 +28,9 @@ def index():
 
 @app.route('/game')
 def get_game():
+    # Get the game name from the query parameters and strip any leading/trailing whitespace
     name = request.args.get('game', '').strip()
-
+    # Check for errors in the input and handle them appropriately
     if not name:
         return render_template('invalid.html', error="Please enter a game name.")
     
@@ -41,11 +42,13 @@ def get_game():
 
         games = []
         favorited_games = []
+        # Get favorites for the current user and check if any of the results are in the favorites list
         favorites = get_favorites(session.get('user_id'))
         for g in results:
             for h in favorites:
                 if g.get('name') == h.get('name'):
                     favorited_games.append(g.get('name'))
+        # Create a list of games with relevant details, filtering out those with a rating of 0
         games = [
             {
                 'name': g.get('name'),
@@ -56,8 +59,8 @@ def get_game():
             for g in results if g.get('rating', 0) > 0
         ]
 
-        print(favorites)  # Debugging line to check the list of favorited games
-        print(favorited_games)  # Debugging line to check the list of favorited game names
+        #print(favorites)  # Debugging line to check the list of favorited games
+        #print(favorited_games)  # Debugging line to check the list of favorited game names
         return render_template(
             'game.html', 
             games=games,
@@ -75,16 +78,19 @@ def favorites_page():
 
 @app.route('/process_favorite', methods=['POST'])
 def process_favorite():
+    # Get the JSON payload from the request
     data = request.get_json()
     if not data:
         return jsonify({'error': 'Invalid payload'}), 400
-
+    
     user_id = session.get('user_id')
+    # Extract relevant fields from the JSON payload
     title = data.get('title')
     image_url = data.get('image_url')
     released = data.get('released')
     rating = data.get('rating')
-    print("running")
+    #print("running")
+    # Connect to the SQLite database and insert the favorite game details
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
 
