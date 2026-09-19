@@ -17,13 +17,13 @@
             <img src="{{ game.image }}" class="game-img">
             <p>{{ game.name }} <br> Released: {{ game.released }} <br> Rating: {{ game.rating }}</p>
         </div>
-        
+        <!-- Form for adding game to favorites -->
         <form class="form-inline">
             <input type="hidden" name="title" value="{{ game.name }}">
             <input type="hidden" name="image_url" value="{{ game.image }}">
             <input type="hidden" name="released" value="{{ game.released }}">
             <input type="hidden" name="rating" value="{{ game.rating }}">
-
+            <!-- if statement to check if game is already favorited -->
             <div class="right">
              {% if game.name in favorite_names %}
                 <button type="submit" class="favorite-btn" disabled>Favorited</button>
